@@ -1,0 +1,29 @@
+groups:
+  - name: example
+    rules:
+      - alert: HighCPUUsage
+        expr: cpu_usage_percent > 80
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU usage detected
+          description: CPU usage is above 80% for more than 1 minute
+
+      - alert: HighMemoryUsage
+        expr: memory_usage_mb > 800
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: High memory usage detected
+          description: Memory usage is above 800MB for more than 1 minute
+
+      - alert: HighErrorRate
+        expr: rate(http_errors_total[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: High error rate detected
+          description: Error rate is above 10% for more than 1 minute 
