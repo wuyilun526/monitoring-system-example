@@ -2,9 +2,15 @@ version: '3'
 
 services:
   app:
-    build: ./app
+    build: .
     ports:
-      - "5001:5001"
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./app:/app
     networks:
       - monitoring
 
@@ -12,6 +18,8 @@ services:
     image: prom/prometheus:latest
     ports:
       - "9090:9090"
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
@@ -27,6 +35,8 @@ services:
     image: prom/alertmanager:latest
     ports:
       - "9093:9093"
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - ./alertmanager:/etc/alertmanager
     command:
@@ -45,6 +55,11 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DEFAULT_INSTANCE_NAME=AMP
+      - GF_DATE_FORMATS_DEFAULT_TIMEZONE=Asia/Shanghai
+    depends_on:
+      - prometheus
     networks:
       - monitoring
 
